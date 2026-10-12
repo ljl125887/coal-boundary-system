@@ -4,7 +4,6 @@ from pathlib import Path
 import logging
 import os
 
-import h5py
 import numpy as np
 
 
@@ -50,6 +49,8 @@ class LegacyKerasSegmenter:
         return tf.keras.Model(inputs=inputs, outputs=outputs, name="legacy_coal_segmenter")
 
     def _load_legacy_weights(self, path: Path) -> None:
+        import h5py  # Optional: only needed when loading model weights.
+
         with h5py.File(path, "r") as h5:
             for layer in self.model.layers:
                 if layer.name not in h5 or not layer.weights:

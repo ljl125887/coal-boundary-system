@@ -26,4 +26,4 @@ Worker 从外部后端领取任务，管理租约、进度及结果上报。成�
 
 ## 技术栈
 
-Python、NumPy、SciPy、Shapely、PyYAML、OpenPyXL、JSON Schema、Tkinter；TensorFlow 为可选模型适配依赖。默认合成演示关闭模型，训练权重不随仓库分发。
+Python、NumPy、SciPy、scikit-image、Shapely、PyYAML、OpenPyXL、JSON Schema、Tkinter；TensorFlow 和 h5py 为可选模型适配依赖。默认合成演示关闭模型，训练权重不随仓库分发。
