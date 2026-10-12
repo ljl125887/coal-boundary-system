@@ -1,0 +1,54 @@
+# Generic settings and invented demo paths. No surveyed data or reference total.
+project:
+  name: synthetic-stockpile-demo
+  las_dir: demo_workspace/input
+  output_dir: demo_workspace/manual-run
+  reference_xlsx: null
+  roi_geojson: null
+crs:
+  source_epsg: 4549
+  output_epsg: 4326
+  central_meridian_deg: 120.0
+  false_easting_m: 500000.0
+  false_northing_m: 0.0
+raster:
+  cell_size_m: 1.0
+  chunk_points: 100000
+  minimum_z_m: -20.0
+  maximum_z_m: 60.0
+ground:
+  opening_radius_m: 25.0
+  smoothing_sigma_m: 2.0
+segmentation:
+  minimum_height_m: 0.35
+  core_height_m: 0.8
+  minimum_area_m2: 35.0
+  minimum_peak_distance_m: 12.0
+  closing_radius_m: 1.0
+display_geometry:
+  selection_strategy: toe_first
+  toe_height_floor_m: 0.05
+  area_tolerance_percent: 15.0
+model:
+  enabled: false
+  weights_path: null
+  cell_classifier_path: null
+evaluation:
+  true_total_volume_m3: 1.0  # Placeholder; no evaluation without a workbook.
+integration:
+  enabled: false
+  base_url: http://localhost:8080
+  token_env: COAL_BOUNDARY_API_TOKEN
+  username_env: COAL_BOUNDARY_API_USERNAME
+  password_env: COAL_BOUNDARY_API_PASSWORD
+  artifact_mode: DISABLED
+  spool_dir: integration_spool
+worker:
+  enabled: false
+  worker_id: demo-worker
+  input_roots:
+    coal-las: demo_workspace/input
+  output_roots:
+    coal-results: demo_workspace/results
+  cache_root: demo_workspace/cache
+  local_log_dir: worker_logs

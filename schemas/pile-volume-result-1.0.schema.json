@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.example/pile-volume-result-1.0.schema.json",
+  "title": "Single Coal Pile Volume Recalculation Result 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "created_at",
+    "recalculation_id",
+    "source_job_id",
+    "source_run_id",
+    "source_pile_id",
+    "source_result_sha256",
+    "dataset_fingerprint",
+    "selection_mode",
+    "crs",
+    "geometry",
+    "metrics",
+    "ground_surface",
+    "quality",
+    "comparison",
+    "runtime_seconds"
+  ],
+  "properties": {
+    "result_kind": {"const": "PILE_VOLUME_RESULT"},
+    "pile_id": {"type": "integer", "minimum": 1},
+    "quality_score": {"type": "number", "minimum": 0, "maximum": 1},
+    "quality_grade": {"enum": ["A", "B", "C"]},
+    "pixel_count": {"type": "integer", "minimum": 0},
+    "schema_version": {"const": "1.0"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "recalculation_id": {"type": "string", "minLength": 16, "maxLength": 64},
+    "source_job_id": {"type": "string", "minLength": 16, "maxLength": 64},
+    "source_run_id": {"type": "string", "minLength": 16, "maxLength": 64},
+    "source_pile_id": {"type": "integer", "minimum": 1},
+    "source_result_sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+    "dataset_fingerprint": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+    "selection_mode": {"enum": ["EXISTING_BOUNDARY", "USER_DRAWN_BOUNDARY"]},
+    "crs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_epsg", "output_epsg"],
+      "properties": {
+        "source_epsg": {"type": "integer", "minimum": 1},
+        "output_epsg": {"const": 4326}
+      }
+    },
+    "geometry": {"$ref": "#/$defs/polygon"},
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "area_m2",
+        "volume_m3",
+        "max_relative_height_m",
+        "mean_relative_height_m",
+        "point_count",
+        "valid_cell_count"
+      ],
+      "properties": {
+        "area_m2": {"type": "number", "minimum": 0},
+        "volume_m3": {"type": "number", "minimum": 0},
+        "max_relative_height_m": {"type": "number", "minimum": 0},
+        "mean_relative_height_m": {"type": "number", "minimum": 0},
+        "point_count": {"type": "integer", "minimum": 0},
+        "valid_cell_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "ground_surface": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["method", "cache_reused", "quality_score"],
+      "properties": {
+        "method": {"enum": ["source_run_ground_surface", "local_sloped_surface"]},
+        "cache_reused": {"type": "boolean"},
+        "quality_score": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score", "grade", "warnings"],
+      "properties": {
+        "score": {"type": "number", "minimum": 0, "maximum": 1},
+        "grade": {"enum": ["A", "B", "C"]},
+        "warnings": {
+          "type": "array",
+          "items": {"type": "string", "maxLength": 500}
+        }
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_area_m2", "source_volume_m3", "area_delta_m2", "volume_delta_m3", "volume_delta_percent"],
+      "properties": {
+        "source_area_m2": {"type": "number", "minimum": 0},
+        "source_volume_m3": {"type": "number", "minimum": 0},
+        "area_delta_m2": {"type": "number"},
+        "volume_delta_m3": {"type": "number"},
+        "volume_delta_percent": {"type": ["number", "null"]}
+      }
+    },
+    "runtime_seconds": {"type": "number", "minimum": 0}
+  },
+  "$defs": {
+    "position": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number", "minimum": -180, "maximum": 180},
+        {"type": "number", "minimum": -90, "maximum": 90}
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "ring": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"$ref": "#/$defs/position"}
+    },
+    "polygon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": {"const": "Polygon"},
+        "coordinates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/ring"}
+        }
+      }
+    }
+  }
+}

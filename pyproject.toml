@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "coal-boundary"
+version = "0.1.0"
+description = "煤堆点云独立边界、质量指标与体积计算后台"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=2.0,<2.3",
+  "scipy>=1.15,<1.16",
+  "shapely>=2.1,<2.2",
+  "openpyxl>=3.1,<3.2",
+  "PyYAML>=6.0,<7",
+  "jsonschema>=4.20,<5",
+]
+
+[project.optional-dependencies]
+ml = [
+  "tensorflow>=2.21,<2.22",
+  "h5py>=3.14,<4",
+]
+test = [
+  "pytest>=9,<10",
+]
+
+[project.scripts]
+coal-boundary = "coal_boundary.cli:main"
+coal-boundary-gui = "coal_boundary.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+coal_boundary = ["schemas/*.json"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
